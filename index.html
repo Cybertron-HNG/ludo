@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ludo · start.ng</title>
+  <meta name="description" content="Play Ludo with friends or bots. Free in your browser on start.ng.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://start.ng/kit.js" defer></script>
+</head>
+<body>
+  <main id="app">
+    <h1>Ludo</h1>
+
+    <!-- the lobby -->
+    <section id="lobby">
+      <p class="lead">Race your four tokens round the board and home. 2 to 4 players.</p>
+      <p class="invite" id="invite" hidden></p>
+      <div class="buttons">
+        <button type="button" id="friend" class="primary">Make a room</button>
+        <button type="button" id="bot">Play the bots</button>
+      </div>
+      <form id="join" class="join" autocomplete="off">
+        <label for="code">Have a code?</label>
+        <input id="code" name="code" maxlength="6" autocapitalize="characters" spellcheck="false" placeholder="K7M2QX">
+        <button type="submit">Join</button>
+      </form>
+      <p class="note">You need to be signed in with start.ng. Make a room, send the code to up to 3 friends, add bots to fill empty seats, and start. The server rolls the die and checks every move.</p>
+      <p class="problem" id="lobby-problem" role="status" hidden></p>
+      <button type="button" id="signin" hidden>Sign in with start.ng</button>
+    </section>
+
+    <!-- waiting for people -->
+    <section id="waiting" hidden>
+      <p class="lead" id="waiting-title">Share this code</p>
+      <div class="code-box">
+        <span class="code" id="room-code" aria-label="Room code"></span>
+        <button type="button" id="copy">Copy invite link</button>
+      </div>
+      <ul class="names" id="names"></ul>
+      <div class="buttons">
+        <button type="button" id="add-bot" hidden>Add a bot</button>
+        <button type="button" id="start" class="primary" hidden>Start the game</button>
+        <button type="button" id="wait-cancel" class="link">Leave</button>
+      </div>
+      <p class="note" id="waiting-note"></p>
+    </section>
+
+    <!-- the game -->
+    <section id="game" hidden aria-label="The game">
+      <div class="players" id="players"></div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <div class="boardwrap" id="boardwrap"><div class="ludo" id="board" role="group" aria-label="Ludo board"></div></div>
+      <div class="dice-row">
+        <div class="die" id="die" aria-live="polite">–</div>
+        <button type="button" id="roll" class="primary">Roll the die</button>
+      </div>
+      <p class="note" id="game-note" role="status" aria-live="polite"></p>
+      <div class="buttons" id="after" hidden>
+        <button type="button" id="share">Share on X</button>
+        <button type="button" id="back" class="primary">Back to the lobby</button>
+      </div>
+      <details class="rules"><summary>How to play</summary>
+        <p>Roll a 6 to bring a token out. Move one token the number you rolled, round the ring and up your own home squares; you need the exact number to finish. A 6 gives you another roll (three 6s in a row lose the turn). Landing on someone else's token sends it back to its base and gives you another roll. Squares with a star or a coloured start square are safe. First to get all four tokens home wins.</p>
+      </details>
+    </section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
