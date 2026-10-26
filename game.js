@@ -81,6 +81,7 @@
     r.on('open', () => note(''));
     r.on('error', (m) => note(m.message));
     r.on('closed', (m) => leaveRoom(reasonText(m.reason)));
+    StartngExtras.watch(r); // sounds, the "play again?" popup, and the waiting spinner (extras.js)
     render();
   }
 
@@ -97,6 +98,7 @@
 
   function leaveRoom(message) {
     room?.leave();
+    StartngExtras.reset();
     room = null;
     botsNext = 0;
     history.replaceState(null, '', location.pathname);
@@ -105,6 +107,14 @@
   }
 
   // ---------- drawing the room ----------
+
+  // How the game ended, for the status line (and the "play again?" popup, which shows it)
+  function ended(result, wonByPlaying) {
+    const won = result.winner === room.you;
+    if (result.reason === 'resigned') return won ? 'They resigned. You win!' : 'You resigned';
+    if (result.reason === 'left') return won ? 'They left. You win!' : `${nameOf(result.winner)} won`;
+    return won ? wonByPlaying : `${nameOf(result.winner)} won`;
+  }
 
   function render() {
     if (!room) return;
@@ -206,7 +216,7 @@
     $('roll').hidden = !!result;
     $('roll').disabled = !s.can_roll;
     $('roll').onclick = () => room.send({ roll: true });
-    if (result) $('status').textContent = result.winner === room.you ? 'All four home. You win! 🎉' : `${nameOf(result.winner)} won`;
+    if (result) $('status').textContent = ended(result, 'All four home. You win! 🎉');
     else if (myTurn) $('status').textContent = s.can_roll ? 'Your turn: roll the die' : 'Pick a token to move';
     else $('status').textContent = `Waiting for ${nameOf(room.turn)}`;
     $('after').hidden = !result;
